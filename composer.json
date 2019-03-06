@@ -20,5 +20,8 @@
     "minimum-stability": "alpha",
     "autoload": {
         "psr-4": {"ListenRobot\\": "src/"}
+    },
+    "autoload-dev": {
+        "psr-4": { "ListenRobot\\tests\\": "tests/" }
     }
 }

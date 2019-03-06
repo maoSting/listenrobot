@@ -27,7 +27,7 @@ class Cache {
      */
     public static function setCache($name, $value = '', $expired = 3600){
         $file = self::getCacheName($name);
-        $content = serialize(['name'=> $name, $value => $value, 'expired'=> intval($expired) + time() ]);
+        $content = serialize(['name'=> $name, 'value' => $value, 'expired'=> intval($expired) + time() ]);
         if(!file_put_contents($file, $content)){
             throw new LocalCacheException(sprintf('local cache path: %s, error', $file), 0);
         }
@@ -45,8 +45,8 @@ class Cache {
         $file = self::getCacheName($name);
         if(file_exists($file) && ($content = file_get_contents($file))){
             $data = unserialize($content);
-            if(isset($data['expires_in']) && ( intval($data['expired']) === 0 ||  $data['expired'] > time() ) ){
-                return $data['expires_in'];
+            if(isset($data['expired']) && ( intval($data['expired']) === 0 ||  $data['expired'] > time() ) ){
+                return $data['value'];
             }
             self::delCache($name);
         }
