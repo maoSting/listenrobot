@@ -41,7 +41,17 @@ class RequestTool {
         return $content;
     }
 
-
+    /**
+     * post 请求
+     * @param       $url
+     * @param array $data
+     * @param array $headers
+     *
+     * @return null
+     * @throws \ErrorException
+     * @throws \ListenRobot\Exceptions\InvalidResponseException
+     * Author: DQ
+     */
     public static function post($url, $data = [], $headers = []){
         $request = new Curl();
         if(!empty($headers)){
@@ -59,7 +69,17 @@ class RequestTool {
         return $content;
     }
 
-
+    /**
+     * put 请求
+     * @param       $url
+     * @param array $data
+     * @param array $headers
+     *
+     * @return null
+     * @throws \ErrorException
+     * @throws \ListenRobot\Exceptions\InvalidResponseException
+     * Author: DQ
+     */
     public static function put($url, $data = [], $headers = []){
         $request = new Curl();
         if(!empty($headers)){
@@ -76,6 +96,35 @@ class RequestTool {
         }
         return $content;
     }
+
+    /**
+     * del 请求
+     * @param       $url
+     * @param array $data
+     * @param array $headers
+     *
+     * @return null
+     * @throws \ErrorException
+     * @throws \ListenRobot\Exceptions\InvalidResponseException
+     * Author: DQ
+     */
+    public static function del($url, $data = [], $headers = []){
+        $request = new Curl();
+        if(!empty($headers)){
+            $request->setHeaders($headers);
+        }
+        $request->setHeader('Content-Type', 'application/json');
+        $request->delete($url, $data);
+        $request->close();
+        $content = null;
+        if($request->httpStatusCode != 200){
+            self::_handlerHttpResponse($request);
+        }else{
+            $content = $request->getRawResponse();
+        }
+        return $content;
+    }
+
 
     /**
      * 详情体处理

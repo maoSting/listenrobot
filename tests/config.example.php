@@ -3,5 +3,6 @@
 return [
     'client_id'=> 'xxxxxx',
     'client_secret' => 'xxxxxx',
-    'app_id' =>  'xxxxxx'
+    'app_id' =>  'xxxxxx',
+    'token' => 'xxxxxx',
 ];

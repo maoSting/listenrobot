@@ -33,7 +33,11 @@ class BasicListenRobot {
     }
 
     /**
-     *
+     * 获取access token
+     * @return null|string
+     * @throws \ErrorException
+     * @throws \ListenRobot\Exceptions\InvalidResponseException
+     * @throws \ListenRobot\Exceptions\LocalCacheException
      * Author: DQ
      */
     public function getAccessToken(){
@@ -164,6 +168,26 @@ class BasicListenRobot {
     public function httpPutStr($url, $data){
         try{
             return RequestTool::put(
+                $url,
+                $data,
+                [
+                    'listenrobot-client-id'=> $this->config['client_id'],
+                    'Authorization'=> 'Bearer '.$this->accessToken,
+                ]
+            );
+        }catch (InvalidResponseException $e){
+            //            if (in_array($e->getCode(), [401])) {
+            //                $this->delAccessToken();
+            //                return call_user_func_array([$this, $this->currentMethod['method']], $this->currentMethod['arguments']);
+            //            }
+            throw new InvalidResponseException($e->getMessage(), $e->getCode());
+        }
+    }
+
+
+    public function httpDelStr($url, $data){
+        try{
+            return RequestTool::del(
                 $url,
                 $data,
                 [

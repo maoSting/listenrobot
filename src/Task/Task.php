@@ -54,7 +54,6 @@ class Task extends BasicListenRobot {
      */
     public function setTaskStatusStart($taskId){
         $url = sprintf('http://al-openapi-uat.listenrobot.com:30201/crm/v1/call_tasks/%s/commands/START', $taskId);
-        // 参数校验？
         return $this->httpPostStr($url, []);
     }
 
@@ -68,9 +67,24 @@ class Task extends BasicListenRobot {
      */
     public function setTaskStatusStop($taskId){
         $url = sprintf('http://al-openapi-uat.listenrobot.com:30201/crm/v1/call_tasks/%s/commands/STOP', $taskId);
-        // 参数校验？
         return $this->httpPutStr($url, []);
     }
+
+
+    /**
+     * 任务删除
+     * @param $taskId
+     *               任务ID
+     *
+     * @return null
+     * @throws \ListenRobot\Exceptions\InvalidResponseException
+     * Author: DQ
+     */
+    public function delTask($taskId){
+        $url = sprintf('http://al-openapi-uat.listenrobot.com:30201/crm/v1/call_tasks/%s', $taskId);
+        return $this->httpDelStr($url, []);
+    }
+
 
 
 }
