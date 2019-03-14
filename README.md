@@ -2,8 +2,11 @@
 
 https://www.lsrai.com/
 
-## Requirement
+## Introduction
+灵声机器人,机器人客服系统,智能电销机器人价格,人工智能语音对话机器人等
 
+
+## Requirement
 1. PHP >= 7.0
 2. **[Composer](https://getcomposer.org/)**
 3. php-curl-class/php-curl-class
@@ -37,7 +40,7 @@ $taskLib->createTask($taskData);
 
 
 // 添加通话号码
-$taskLib->addTaskPhone('任务ID', ['手机号码1', '手机号码2']);
+$taskLib->addTaskPhone('任务ID', ['phones' => ['手机号码1', '手机号码2']]);
 
 
 // 设置任务开始

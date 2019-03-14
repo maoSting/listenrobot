@@ -6,6 +6,10 @@ use ListenRobot\Task\Notify;
 
 class TestSign extends BasicTest {
 
+    /**
+     * 验证签名算法是否正确
+     * Author: DQ
+     */
     public function testGetSign(){
         $taskLib = new Notify($this->_config);
         $token = 'p9wOq0e9PZESRSIq';

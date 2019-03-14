@@ -30,6 +30,7 @@ class RequestTool {
             $request->setHeaders($headers);
         }
         $request->setHeader('Content-Type', 'application/json');
+        $request->setTimeout(3);
         $request->get($url, $data);
         $request->close();
         $content = null;
@@ -58,6 +59,7 @@ class RequestTool {
             $request->setHeaders($headers);
         }
         $request->setHeader('Content-Type', 'application/json');
+        $request->setTimeout(3);
         $request->post($url, $data);
         $request->close();
         $content = null;
@@ -86,6 +88,7 @@ class RequestTool {
             $request->setHeaders($headers);
         }
         $request->setHeader('Content-Type', 'application/json');
+        $request->setTimeout(3);
         $request->put($url, $data);
         $request->close();
         $content = null;
@@ -114,6 +117,7 @@ class RequestTool {
             $request->setHeaders($headers);
         }
         $request->setHeader('Content-Type', 'application/json');
+        $request->setTimeout(3);
         $request->delete($url, $data);
         $request->close();
         $content = null;

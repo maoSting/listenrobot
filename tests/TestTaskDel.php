@@ -17,11 +17,10 @@ class TestTaskDel extends BasicTest {
      * Author: DQ
      */
     public function testTaskDel(){
-        $this->_taskId = '131764412674509825';
+        $taskId = '131764412674509825';
         $taskLib = new Task($this->_config);
-        $taskLib->getAccessToken();
         try{
-            $taskReturn = $taskLib->delTask($this->_taskId);
+            $taskReturn = $taskLib->delTask($taskId);
         }catch (\Exception $e){
             $taskReturn = sprintf('code:%s, msg:%s',$e->getCode(), $e->getMessage());
         }

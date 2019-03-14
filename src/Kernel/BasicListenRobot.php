@@ -13,7 +13,18 @@ class BasicListenRobot {
 
     public $config;
 
+    //cache access_token 文件名称
+    private $_fileName = '_access_token';
+
+    // access token
     public $accessToken = '';
+
+    // 当前请求方法
+    private $_currentMethod = [];
+
+    // 是否是重试
+    private $_isTry = false;
+
 
     public function __construct(array $options) {
         if(empty($options['app_id'])){
@@ -44,7 +55,7 @@ class BasicListenRobot {
         if(!empty($this->accessToken)){
             return $this->accessToken;
         }
-        $cache = $this->config->get('app_id').'_access_token';
+        $cache = $this->config->get('app_id').$this->_fileName;
         $this->accessToken = Cache::getCache($cache);
         if(!empty($this->accessToken)){
             return $this->accessToken;
@@ -58,18 +69,44 @@ class BasicListenRobot {
         return $this->accessToken = $data['access_token'];
     }
 
-
+    /**
+     * 设置
+     * @param $accessToken
+     *
+     * @throws \ListenRobot\Exceptions\LocalCacheException
+     * Author: DQ
+     */
     public function setAccessToken($accessToken){
         if (!is_string($accessToken)) {
             throw new InvalidArgumentException("Invalid AccessToken type, need string.");
         }
-        $cache = $this->config->get('app_id') . '_access_token';
+        $cache = $this->config->get('app_id') . $this->_fileName;
         Cache::setCache($cache, $this->accessToken = $accessToken);
     }
 
     public function delAccessToken(){
         $this->accessToken = '';
-        return Cache::delCache($this->config->get('app_id'). 'access_token');
+        return Cache::delCache($this->config->get('app_id'). $this->_fileName);
+    }
+
+
+    /**
+     * 注册请求
+     * @param       $method
+     *                     方法
+     * @param array $arguments
+     *                        参数
+     *
+     * @throws \ErrorException
+     * @throws \ListenRobot\Exceptions\InvalidResponseException
+     * @throws \ListenRobot\Exceptions\LocalCacheException
+     * Author: DQ
+     */
+    protected function registerApi($method, $arguments = []){
+        $this->_currentMethod = ['method'=> $method, 'arguments'=> $arguments];
+        if(empty($this->accessToken)){
+            $this->getAccessToken();
+        }
     }
 
     /**
@@ -83,6 +120,7 @@ class BasicListenRobot {
      */
     public function httpGetJson($url){
         try{
+            $this->registerApi(__FUNCTION__, func_get_args());
             return DataTransform::json2arr(RequestTool::get(
                 $url,
                 [],
@@ -92,10 +130,11 @@ class BasicListenRobot {
                 ]
             ));
         }catch (InvalidResponseException $e){
-//            if (in_array($e->getCode(), [401])) {
-//                $this->delAccessToken();
-//                return call_user_func_array([$this, $this->currentMethod['method']], $this->currentMethod['arguments']);
-//            }
+            if (!$this->_isTry && in_array($e->getCode(), [401])) {
+                $this->delAccessToken();
+                $this->_isTry = true;
+                return call_user_func_array([$this, $this->_currentMethod['method']], $this->_currentMethod['arguments']);
+            }
             throw new InvalidResponseException($e->getMessage(), $e->getCode());
         }
     }
@@ -111,6 +150,7 @@ class BasicListenRobot {
      */
     public function httpPostJson($url, $data){
         try{
+            $this->registerApi(__FUNCTION__, func_get_args());
             return DataTransform::json2arr(RequestTool::post(
                 $url,
                 $data,
@@ -120,10 +160,11 @@ class BasicListenRobot {
                 ]
             ));
         }catch (InvalidResponseException $e){
-            //            if (in_array($e->getCode(), [401])) {
-            //                $this->delAccessToken();
-            //                return call_user_func_array([$this, $this->currentMethod['method']], $this->currentMethod['arguments']);
-            //            }
+            if (!$this->_isTry && in_array($e->getCode(), [401])) {
+                $this->delAccessToken();
+                $this->_isTry = true;
+                return call_user_func_array([$this, $this->_currentMethod['method']], $this->_currentMethod['arguments']);
+            }
             throw new InvalidResponseException($e->getMessage(), $e->getCode());
         }
     }
@@ -139,6 +180,7 @@ class BasicListenRobot {
      */
     public function httpPostStr($url, $data){
         try{
+            $this->registerApi(__FUNCTION__, func_get_args());
             return RequestTool::post(
                 $url,
                 $data,
@@ -148,10 +190,11 @@ class BasicListenRobot {
                 ]
             );
         }catch (InvalidResponseException $e){
-            //            if (in_array($e->getCode(), [401])) {
-            //                $this->delAccessToken();
-            //                return call_user_func_array([$this, $this->currentMethod['method']], $this->currentMethod['arguments']);
-            //            }
+            if (!$this->_isTry && in_array($e->getCode(), [401])) {
+                $this->delAccessToken();
+                $this->_isTry = true;
+                return call_user_func_array([$this, $this->_currentMethod['method']], $this->_currentMethod['arguments']);
+            }
             throw new InvalidResponseException($e->getMessage(), $e->getCode());
         }
     }
@@ -167,6 +210,7 @@ class BasicListenRobot {
      */
     public function httpPutStr($url, $data){
         try{
+            $this->registerApi(__FUNCTION__, func_get_args());
             return RequestTool::put(
                 $url,
                 $data,
@@ -176,17 +220,28 @@ class BasicListenRobot {
                 ]
             );
         }catch (InvalidResponseException $e){
-            //            if (in_array($e->getCode(), [401])) {
-            //                $this->delAccessToken();
-            //                return call_user_func_array([$this, $this->currentMethod['method']], $this->currentMethod['arguments']);
-            //            }
+            if (!$this->_isTry && in_array($e->getCode(), [401])) {
+                $this->delAccessToken();
+                $this->_isTry = true;
+                return call_user_func_array([$this, $this->_currentMethod['method']], $this->_currentMethod['arguments']);
+            }
             throw new InvalidResponseException($e->getMessage(), $e->getCode());
         }
     }
 
-
+    /**
+     * del 请求返回str
+     * @param $url
+     * @param $data
+     *
+     * @return mixed|null
+     * @throws \ErrorException
+     * @throws \ListenRobot\Exceptions\InvalidResponseException
+     * Author: DQ
+     */
     public function httpDelStr($url, $data){
         try{
+            $this->registerApi(__FUNCTION__, func_get_args());
             return RequestTool::del(
                 $url,
                 $data,
@@ -196,10 +251,11 @@ class BasicListenRobot {
                 ]
             );
         }catch (InvalidResponseException $e){
-            //            if (in_array($e->getCode(), [401])) {
-            //                $this->delAccessToken();
-            //                return call_user_func_array([$this, $this->currentMethod['method']], $this->currentMethod['arguments']);
-            //            }
+            if (!$this->_isTry && in_array($e->getCode(), [401])) {
+                $this->delAccessToken();
+                $this->_isTry = true;
+                return call_user_func_array([$this, $this->_currentMethod['method']], $this->_currentMethod['arguments']);
+            }
             throw new InvalidResponseException($e->getMessage(), $e->getCode());
         }
     }

@@ -6,16 +6,6 @@ use ListenRobot\Task\Task;
 class TestTask extends BasicTest {
     protected $_taskId = '';
 
-    /**
-     * 测试获取配置
-     * Author: DQ
-     */
-    public function testGetConfig(){
-        $taskLib = new Task($this->_config);
-        $taskLib->getAccessToken();
-        $data = $taskLib->getTaskInfo();
-        $this->assertNotEmpty($data, '电话任务配置列表');
-    }
 
     /**
      * 创建任务
@@ -38,7 +28,6 @@ class TestTask extends BasicTest {
             'remark' => 'just for test'
         ];
         $taskLib = new Task($this->_config);
-        $taskLib->getAccessToken();
         $this->_taskId = $taskLib->createTask($data);
         $this->assertNotEmpty($this->_taskId, '创建电话任务失败');
     }
@@ -51,7 +40,6 @@ class TestTask extends BasicTest {
     public function testAddPhoneToTask(){
         $this->_taskId = '131764412674509825';
         $taskLib = new Task($this->_config);
-        $taskLib->getAccessToken();
         $taskReturn = $taskLib->addTaskPhone($this->_taskId, ['phones'=>$this->_phones]);
         $this->assertEmpty($taskReturn, '向电话任务添加手机号码 失败');
     }

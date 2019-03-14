@@ -13,7 +13,6 @@ class TestTaskStatus extends BasicTest {
     public function testTaskStart(){
         $this->_taskId = '131764412674509825';
         $taskLib = new Task($this->_config);
-        $taskLib->getAccessToken();
         try{
             $taskReturn = $taskLib->setTaskStatusStart($this->_taskId);
         }catch (\Exception $e){
@@ -31,7 +30,6 @@ class TestTaskStatus extends BasicTest {
     public function testTaskEnd(){
         $this->_taskId = '131764412674509825';
         $taskLib = new Task($this->_config);
-        $taskLib->getAccessToken();
         try{
             $taskReturn = $taskLib->setTaskStatusStop($this->_taskId);
         }catch (\Exception $e){
