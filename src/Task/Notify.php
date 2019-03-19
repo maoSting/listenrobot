@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * Author: DQ
- * Date: 2019/3/7
- * Time: 11:08
- */
 
 namespace ListenRobot\Task;
 
@@ -12,6 +6,12 @@ use ListenRobot\Exceptions\InvalidResponseException;
 use ListenRobot\Kernel\BasicListenRobot;
 use ListenRobot\Tools\DataTransform;
 
+/**
+ * 通话记录回传
+ * Class Notify
+ * Author: DQ
+ * @package ListenRobot\Task
+ */
 class Notify extends BasicListenRobot {
 
     /**

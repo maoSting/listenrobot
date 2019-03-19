@@ -38,10 +38,11 @@ $taskLib->getTaskInfo();
 $taskData = []; // 详见文档
 $taskLib->createTask($taskData);
 
+// 获取任务执行详情
+$taskLib->getTaskDetail('任务ID');
 
 // 添加通话号码
 $taskLib->addTaskPhone('任务ID', ['phones' => ['手机号码1', '手机号码2']]);
-
 
 // 设置任务开始
 $taskLib->setTaskStatusStart('任务ID');
@@ -51,9 +52,38 @@ $taskLib->setTaskStatusStop('任务ID');
 
 // 删除任务
 $taskLib->delTask('任务ID');
+
+// 获取任务下通话详情
+$taskLib->getTaskRecord('任务ID', '页数', '每页条数');
+
+
 ```
 
+#### 通话记录
 
+```php
+<?php
+
+use ListenRobot\Task\Record;
+
+$config = [
+    'client_id'=> 'xxxxxxxx',
+    'client_secret' => 'xxxxxxxx',
+    'app_id' =>  'xxxxxxxx',
+    'token' => 'xxxxxxxx',
+];
+
+$recordLib = new Record($config);
+
+// 获取通话记录详情
+$recordLib->getRecordItem('通话记录ID');
+
+// 获取通话声音文件流
+$recordLib->getStream('通话记录ID');
+
+// 下载通话声音文件
+$recordLib->download('通话记录ID', '文件路径');
+```
 
 
 
@@ -79,6 +109,9 @@ $taskLib->getNotify();
 // 获取通知数据签名
 $taskLib->getNotifySign('加密token', 'evenType 参数', 'timeStamp 参数', 'nonce 参数', 'eventData 参数');
 ```
+
+## TODO
+
 
 ## License
 

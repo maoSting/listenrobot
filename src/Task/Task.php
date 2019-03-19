@@ -4,10 +4,17 @@ namespace ListenRobot\Task;
 
 use ListenRobot\Kernel\BasicListenRobot;
 
+/**
+ * 任务相关操作
+ * Class Task
+ * Author: DQ
+ * @package ListenRobot\Task
+ */
 class Task extends BasicListenRobot {
 
     /**
-     * 获取呼叫任务相关配置信息
+     * 获取话术模版
+     * @todo 后期拆分
      *
      * @return mixed
      * @throws \ErrorException
@@ -19,6 +26,39 @@ class Task extends BasicListenRobot {
         $url = 'http://al-openapi-uat.listenrobot.com:30201/crm/v1/call_tasks/call_config_info';
         return $this->httpGetJson($url);
     }
+
+
+    /**
+     * 呼叫任务查询
+     * @param string $taskId
+     * Author: DQ
+     */
+    public function getTaskDetail($taskId = ''){
+        $url = sprintf('%s/crm/v1/call_tasks/%s',self::HOST, $taskId);
+        return $this->httpGetJson($url);
+    }
+
+    /**
+     * 获取通话任务下，通话记录
+     * @param string $taskId
+     * @param int    $page
+     * @param int    $pageSize
+     *
+     * @return mixed
+     * @throws \ErrorException
+     * @throws \ListenRobot\Exceptions\InvalidResponseException
+     * Author: DQ
+     */
+    public function getTaskRecord($taskId = '', $page = 1, $pageSize = 10){
+        $data = [
+            'page='.intval($page),
+            'pageSize='.intval($pageSize),
+        ];
+        $url = sprintf('%s/crm/v1/call_tasks/%s/call_records?%s',self::HOST, $taskId, implode('&', $data));
+        return $this->httpGetJson($url);
+    }
+
+
 
     /**
      * 创建任务
@@ -84,6 +124,7 @@ class Task extends BasicListenRobot {
         $url = sprintf('http://al-openapi-uat.listenrobot.com:30201/crm/v1/call_tasks/%s', $taskId);
         return $this->httpDelStr($url, []);
     }
+
 
 
 

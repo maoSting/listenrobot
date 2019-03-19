@@ -3,7 +3,7 @@ namespace ListenRobot\tests;
 
 use ListenRobot\Task\Task;
 
-class TestTask extends BasicTest {
+class TestTaskCreate extends BasicTest {
     protected $_taskId = '';
 
 
@@ -13,7 +13,9 @@ class TestTask extends BasicTest {
      *
      */
     public function testCreateTask(){
-        $code = 'T_H0ZOCjFEGNVD';
+
+        // 模版
+        $code = $this->_template;
         $time = time();
         $startTime = $time.'000';
         $endTime = ($time+86400).'000';
@@ -25,24 +27,23 @@ class TestTask extends BasicTest {
             'callTaskPeriodRange'=>[
                 '9:00:00,12:00:00', '14:00:00,20:00:00'
             ],
-            'remark' => 'just for test'
+            'remark' => 'just for test',
+            'redialConfig' => [
+                'redialTimes' => 2,
+                'redialInterval' => 2,
+                'responseCodes' => [
+                    "40",
+                    "408"
+                ],
+            ]
         ];
         $taskLib = new Task($this->_config);
         $this->_taskId = $taskLib->createTask($data);
+        echo sprintf('任务 task_id %s', $this->_taskId);
         $this->assertNotEmpty($this->_taskId, '创建电话任务失败');
     }
 
-    /**
-     * 添加号码到通话人物
-     * @throws \ListenRobot\Exceptions\InvalidResponseException
-     * Author: DQ
-     */
-    public function testAddPhoneToTask(){
-        $this->_taskId = '131764412674509825';
-        $taskLib = new Task($this->_config);
-        $taskReturn = $taskLib->addTaskPhone($this->_taskId, ['phones'=>$this->_phones]);
-        $this->assertEmpty($taskReturn, '向电话任务添加手机号码 失败');
-    }
+
 
 
 }

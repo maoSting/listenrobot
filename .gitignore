@@ -4,3 +4,5 @@ vendor
 Cache
 tests/phones.php
 tests/config.php
+tests/template.php
+tests/task_id.php

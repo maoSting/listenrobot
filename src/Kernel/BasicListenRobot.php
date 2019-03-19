@@ -11,6 +11,8 @@ use ListenRobot\Tools\RequestTool;
 
 class BasicListenRobot {
 
+    const HOST = 'http://al-openapi-uat.listenrobot.com:30201';
+
     const VERSION = '1.6';
 
     public $config;
@@ -141,6 +143,37 @@ class BasicListenRobot {
                     'Authorization'=> 'Bearer '.$this->accessToken,
                 ]
             ));
+        }catch (InvalidResponseException $e){
+            if (!$this->_isTry && in_array($e->getCode(), [401])) {
+                $this->delAccessToken();
+                $this->_isTry = true;
+                return call_user_func_array([$this, $this->_currentMethod['method']], $this->_currentMethod['arguments']);
+            }
+            throw new InvalidResponseException($e->getMessage(), $e->getCode());
+        }
+    }
+
+
+    /**
+     * http get 简单请求
+     * @param $url
+     *
+     * @return mixed
+     * @throws \ErrorException
+     * @throws \ListenRobot\Exceptions\InvalidResponseException
+     * Author: DQ
+     */
+    public function httpGetStr($url){
+        try{
+            $this->registerApi(__FUNCTION__, func_get_args());
+            return RequestTool::get(
+                $url,
+                [],
+                [
+                    'listenrobot-client-id'=> $this->config['client_id'],
+                    'Authorization'=> 'Bearer '.$this->accessToken,
+                ]
+            );
         }catch (InvalidResponseException $e){
             if (!$this->_isTry && in_array($e->getCode(), [401])) {
                 $this->delAccessToken();
