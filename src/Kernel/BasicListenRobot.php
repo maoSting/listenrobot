@@ -11,6 +11,8 @@ use ListenRobot\Tools\RequestTool;
 
 class BasicListenRobot {
 
+    const VERSION = '1.6';
+
     public $config;
 
     //cache access_token 文件名称
@@ -42,6 +44,16 @@ class BasicListenRobot {
 
         $this->config = new DataArray($options);
     }
+
+    /**
+     * 获取灵声版本号
+     * @return string
+     * Author: DQ
+     */
+    public function getVersion(){
+        return self::VERSION;
+    }
+
 
     /**
      * 获取access token
