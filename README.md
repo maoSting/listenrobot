@@ -15,6 +15,12 @@ https://www.lsrai.com/
 
 ## Usage
 
+
+#### 注意
+**请使用try catch，错误都是抛出异常。**
+
+
+
 #### 任务操作
 
 ```php

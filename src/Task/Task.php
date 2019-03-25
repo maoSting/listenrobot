@@ -23,7 +23,7 @@ class Task extends BasicListenRobot {
      *
      */
     public function getTaskInfo(){
-        $url = 'http://al-openapi-uat.listenrobot.com:30201/crm/v1/call_tasks/call_config_info';
+        $url = sprintf('%s/crm/v1/call_tasks/call_config_info', self::HOST);
         return $this->httpGetJson($url);
     }
 
@@ -65,8 +65,7 @@ class Task extends BasicListenRobot {
      * Author: DQ
      */
     public function createTask($data){
-        $url = 'http://al-openapi-uat.listenrobot.com:30201/crm/v1/call_tasks/create';
-        // 参数校验？
+        $url = sprintf('%s/crm/v1/call_tasks/create', self::HOST);
         return $this->httpPostStr($url, $data);
     }
 
@@ -79,8 +78,7 @@ class Task extends BasicListenRobot {
      * Author: DQ
      */
     public function addTaskPhone($taskId = '', $data = []){
-        $url = sprintf('http://al-openapi-uat.listenrobot.com:30201/crm/v1/call_tasks/%s/called_phones', $taskId);
-        // 参数校验？
+        $url = sprintf('%s/crm/v1/call_tasks/%s/called_phones', self::HOST, $taskId);
         return $this->httpPostStr($url, $data);
     }
 
@@ -93,7 +91,7 @@ class Task extends BasicListenRobot {
      * Author: DQ
      */
     public function setTaskStatusStart($taskId){
-        $url = sprintf('http://al-openapi-uat.listenrobot.com:30201/crm/v1/call_tasks/%s/commands/START', $taskId);
+        $url = sprintf('%s/crm/v1/call_tasks/%s/commands/START', self::HOST, $taskId);
         return $this->httpPostStr($url, []);
     }
 
@@ -106,7 +104,7 @@ class Task extends BasicListenRobot {
      * Author: DQ
      */
     public function setTaskStatusStop($taskId){
-        $url = sprintf('http://al-openapi-uat.listenrobot.com:30201/crm/v1/call_tasks/%s/commands/STOP', $taskId);
+        $url = sprintf('%s/crm/v1/call_tasks/%s/commands/STOP', self::HOST, $taskId);
         return $this->httpPutStr($url, []);
     }
 
@@ -121,7 +119,7 @@ class Task extends BasicListenRobot {
      * Author: DQ
      */
     public function delTask($taskId){
-        $url = sprintf('http://al-openapi-uat.listenrobot.com:30201/crm/v1/call_tasks/%s', $taskId);
+        $url = sprintf('%s/crm/v1/call_tasks/%s', self::HOST, $taskId);
         return $this->httpDelStr($url, []);
     }
 

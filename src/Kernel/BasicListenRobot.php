@@ -11,7 +11,8 @@ use ListenRobot\Tools\RequestTool;
 
 class BasicListenRobot {
 
-    const HOST = 'http://al-openapi-uat.listenrobot.com:30201';
+    const HOST = 'http://al-openapi-pro.listenrobot.com:30201';
+
 
     const VERSION = '1.6';
 
@@ -75,7 +76,8 @@ class BasicListenRobot {
             return $this->accessToken;
         }
 
-        $url = sprintf('http://al-openapi-uat.listenrobot.com:30201/oauth2/token?grant_type=client_credentials&client_id=%s&client_secret=%s', $this->config['client_id'], $this->config['client_secret']);
+        $url = sprintf('%s/oauth2/token?grant_type=client_credentials&client_id=%s&client_secret=%s', self::HOST, $this->config['client_id'], $this->config['client_secret']);
+
         $data = DataTransform::json2arr(RequestTool::get($url));
         if(!empty($data['access_token'])){
             Cache::setCache($cache, $data['access_token'], $data['expires_in'] - 10 );
