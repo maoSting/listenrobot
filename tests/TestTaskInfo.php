@@ -14,6 +14,7 @@ class TestTaskInfo extends BasicTest {
     public function testTaskConfig(){
         $taskLib = new Task($this->_config);
         $data = $taskLib->getTaskDetail($this->_task_id);
+        var_dump($data);
         $this->assertNotEmpty($data, '获取电话任务详情失败');
     }
 

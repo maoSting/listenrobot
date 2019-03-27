@@ -20,7 +20,7 @@ class TestTaskCreate extends BasicTest {
         $startTime = $time.'000';
         $endTime = ($time+86400).'000';
         $data = [
-            'name' => 'name '.$time,
+            'name' => 'name test',
             'verbalTrickCode' => $code,
             'startTime' => $startTime,
             'endTime' => $endTime,
@@ -39,7 +39,7 @@ class TestTaskCreate extends BasicTest {
         ];
         $taskLib = new Task($this->_config);
         $this->_taskId = $taskLib->createTask($data);
-        echo sprintf('任务 task_id %s', $this->_taskId);
+        var_dump($this->_taskId);
         $this->assertNotEmpty($this->_taskId, '创建电话任务失败');
     }
 

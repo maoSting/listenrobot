@@ -92,7 +92,7 @@ class Task extends BasicListenRobot {
      */
     public function setTaskStatusStart($taskId){
         $url = sprintf('%s/crm/v1/call_tasks/%s/commands/START', self::HOST, $taskId);
-        return $this->httpPostStr($url, []);
+        return $this->httpPutStr($url, []);
     }
 
     /**
